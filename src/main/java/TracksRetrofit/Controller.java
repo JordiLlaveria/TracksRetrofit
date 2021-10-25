@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Controller implements Callback<List<Track>> {
 
-    static final String BASE_URL = "http://localhost:8080/dsaAPP/";
+    static final String BASE_URL = "http://localhost:8080/dsaApp/";
 
     public void start() {
         Gson gson = new GsonBuilder()
@@ -28,7 +28,7 @@ public class Controller implements Callback<List<Track>> {
 
         TrackAPI trackAPI = retrofit.create(TrackAPI.class);
 
-        //Get All Tracks
+        //Get All Tracks (Returns 201)
         Call<List<Track>> call = trackAPI.loadTracks();
         call.enqueue(this);
     }
