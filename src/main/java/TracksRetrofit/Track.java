@@ -4,7 +4,6 @@ public class Track {
     String title;
     String singer;
     String id;
-
     public String getId() {
         return this.id;
     }

@@ -16,7 +16,7 @@ import retrofit2.http.Path;
 public class Controller {
 
     static final String BASE_URL = "http://localhost:8080/dsaApp/";
-
+    TrackAPI trackAPI;
     public void start() {
         Gson gson = new GsonBuilder()
                 .setLenient()
@@ -27,12 +27,13 @@ public class Controller {
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
-        TrackAPI trackAPI = retrofit.create(TrackAPI.class);
-
+        trackAPI = retrofit.create(TrackAPI.class);
+    }
+    public void getAllTracks() {
         //Get All Tracks (Returns 201)
         //2soT1G093
-        /*Call<List<Track>> call = trackAPI.loadTracks();
-        call.enqueue(new Callback<List<Track>>() {
+        Call<List<Track>> callgetalltracks = trackAPI.loadTracks();
+        callgetalltracks.enqueue(new Callback<List<Track>>() {
             @Override
             public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
                 if (response.isSuccessful()) {
@@ -52,9 +53,11 @@ public class Controller {
                 t.printStackTrace();
             }
         });
-        */
-        Call<Track> call2 = trackAPI.getTrack("2soT1G093");
-        call2.enqueue(new Callback<Track>() {
+    }
+    public void getSingleTrack(String id){
+        //Get a single track
+        Call<Track> callsingletrack = trackAPI.getTrack(id);
+        callsingletrack.enqueue(new Callback<Track>() {
             @Override
             public void onResponse(Call<Track> call, Response<Track> response) {
                 if (response.isSuccessful()) {
@@ -62,8 +65,7 @@ public class Controller {
                     System.out.println(track.getId());
                     System.out.println(track.getTitle());
                     System.out.println(track.getSinger());
-                }
-                else {
+                } else {
                     System.out.println(response.errorBody());
                 }
             }
@@ -71,6 +73,73 @@ public class Controller {
             @Override
             public void onFailure(Call<Track> call, Throwable t) {
                 t.printStackTrace();
+            }
+        });
+    }
+    //DELETE esborra un element del servidor
+    public void deleteTrack(String id){
+        //Delete a single track
+        Call<Track> calldelete = trackAPI.deleteTrack(id);
+        calldelete.enqueue(new Callback<Track>() {
+            @Override
+            public void onResponse(Call<Track> call, Response<Track> response) {
+                if (response.isSuccessful()) {
+                    Track track = response.body();
+                    System.out.println(track.getId());
+                    System.out.println(track.getTitle());
+                    System.out.println(track.getSinger());
+                } else {
+                    System.out.println(response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Track> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+    //POST permet afegir un element nou al servidor
+    public void postNewTrack(String id, String singer, String title){
+        Track trackpost = new Track();
+        trackpost.setId(id);
+        trackpost.setSinger(singer);
+        trackpost.setTitle(title);
+        Call<Track> callpost = trackAPI.postTrack(trackpost);
+        callpost.enqueue(new Callback<Track>() {
+            @Override
+            public void onResponse(Call<Track> call, Response<Track> response) {
+                if (response.isSuccessful()) {
+                    Track track = response.body();
+                    System.out.println(track.getId());
+                    System.out.println(track.getTitle());
+                    System.out.println(track.getSinger());
+                } else {
+                    System.out.println(response.errorBody());
+                }
+            }
+            @Override
+            public void onFailure(Call<Track> call, Throwable t) {
+            }
+        });
+    }
+    //PUT permet editar un element ja existent al servidor
+    public void putNewTrack(String id, String singer, String title) {
+        Track trackput = new Track();
+        trackput.setId(id);
+        trackput.setSinger(singer);
+        trackput.setTitle(title);
+        Call<Track> callput = trackAPI.updateTrack(trackput);
+        callput.enqueue(new Callback<Track>() {
+            @Override
+            public void onResponse(Call<Track> call, Response<Track> response) {
+                if (response.isSuccessful()) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Track> call, Throwable t) {
+
             }
         });
     }
