@@ -11,8 +11,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Path;
 
-public class Controller implements Callback<List<Track>> {
+public class Controller {
 
     static final String BASE_URL = "http://localhost:8080/dsaApp/";
 
@@ -29,26 +30,48 @@ public class Controller implements Callback<List<Track>> {
         TrackAPI trackAPI = retrofit.create(TrackAPI.class);
 
         //Get All Tracks (Returns 201)
-        Call<List<Track>> call = trackAPI.loadTracks();
-        call.enqueue(this);
-    }
-
-    @Override
-    public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
-        if(response.isSuccessful()) {
-            List<Track> trackList = response.body();
-            for (Track track: trackList) {
-                System.out.println(track.getId());
-                System.out.println(track.getTitle());
-                System.out.println(track.getSinger());
+        //2soT1G093
+        /*Call<List<Track>> call = trackAPI.loadTracks();
+        call.enqueue(new Callback<List<Track>>() {
+            @Override
+            public void onResponse(Call<List<Track>> call, Response<List<Track>> response) {
+                if (response.isSuccessful()) {
+                    List<Track> trackList = response.body();
+                    for (Track track : trackList) {
+                        System.out.println(track.getId());
+                        System.out.println(track.getTitle());
+                        System.out.println(track.getSinger());
+                    }
+                } else {
+                    System.out.println(response.errorBody());
+                }
             }
-        } else {
-            System.out.println(response.errorBody());
-        }
-    }
 
-    @Override
-    public void onFailure(Call<List<Track>> call, Throwable t) {
-        t.printStackTrace();
+            @Override
+            public void onFailure(Call<List<Track>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+        */
+        Call<Track> call2 = trackAPI.getTrack("2soT1G093");
+        call2.enqueue(new Callback<Track>() {
+            @Override
+            public void onResponse(Call<Track> call, Response<Track> response) {
+                if (response.isSuccessful()) {
+                    Track track = response.body();
+                    System.out.println(track.getId());
+                    System.out.println(track.getTitle());
+                    System.out.println(track.getSinger());
+                }
+                else {
+                    System.out.println(response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Track> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
     }
 }
